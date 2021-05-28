@@ -1,11 +1,18 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Image compress'
+description: 'Compress images'
+author: 'SettingDust'
 inputs:
-  milliseconds: # change this
+  files:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: Multi-line for files. Can use glob patterns.
+  quality:
+    description: 0-100, default is the ratio of maxSize / file size
+  min-size:
+    description: The min size of images be compressed. Unit is Byte
+outputs:
+  images:
+    description: Compressed images path
+    
 runs:
   using: 'node12'
-  main: 'dist/index.js'
+  main: 'dist/main.js'
