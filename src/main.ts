@@ -3,7 +3,7 @@ import {statSync} from 'fs'
 import * as path from 'path'
 import globby from 'globby'
 import imagemin from 'imagemin'
-import imageminMozjpeg from 'imagemin-mozjpeg'
+import imageminJpegoptim from 'imagemin-jpegoptim'
 import imageminPngquant from 'imagemin-pngquant'
 
 async function run(): Promise<void> {
@@ -27,14 +27,14 @@ async function run(): Promise<void> {
     const size = statSync(file).size
     const realQuality: number = quality ? quality : (minSize / size) * 100
     console.log(`正在处理：${file}`)
-    console.log(`压缩前大小：${size / 1024}KB`)
+    console.log(`压缩前大小：${size / 1024} KB`)
     console.log(`质量：${realQuality}`)
 
     const result = await imagemin([file], {
       destination: 'build/images',
       plugins: [
-        imageminMozjpeg({
-          quality: Math.floor(realQuality),
+        imageminJpegoptim({
+          size: minSize,
           progressive: false
         }),
         imageminPngquant({
@@ -44,7 +44,7 @@ async function run(): Promise<void> {
     })
     const destination = result[0].destinationPath
     console.log(
-      `压缩后大小：${statSync(path.resolve(destination)).size / 1024}KB`
+      `压缩后大小：${statSync(path.resolve(destination)).size / 1024} KB`
     )
     outputs.push(destination)
   }
