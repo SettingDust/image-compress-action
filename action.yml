@@ -14,5 +14,5 @@ outputs:
     description: Compressed images path
     
 runs:
-  using: 'node12'
-  main: 'dist/main.js'
+  using: 'node14'
+  main: 'dist/index.js'
