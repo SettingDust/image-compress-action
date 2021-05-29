@@ -9,6 +9,8 @@ inputs:
     description: 0-100, default is the ratio of maxSize / file size
   min-size:
     description: The min size of images be compressed. Unit is Byte
+  max-dimension:
+    description: The max value of width/height
 outputs:
   images:
     description: Compressed images path
