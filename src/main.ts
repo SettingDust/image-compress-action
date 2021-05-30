@@ -20,7 +20,7 @@ async function compress(
     plugins: [
       imageminMozjpeg({
         progressive: false,
-        quality: quality
+        quality
       }),
       imageminPngquant({
         quality: [0.0, quality / 100]
@@ -39,7 +39,7 @@ async function run(): Promise<void> {
   const maxDimension: number = parseInt(core.getInput('max-dimension'))
 
   let fileArray = files.split('⭐')
-  console.log(`输入文件：${fileArray}`)
+  core.info(`输入文件：${fileArray}`)
   fileArray = fileArray.map(it => path.resolve(it))
 
   const filePaths = await globby(fileArray, {onlyFiles: true})
@@ -48,11 +48,10 @@ async function run(): Promise<void> {
   for (let file of filePaths) {
     const size = statSync(file).size
     const realQuality: number = quality ? quality : (minSize / size) * 100
-    let dimension = imageSize(file)
-    console.log(`正在处理：${file}`)
-    console.log(`压缩前大小：${size / 1024} KB`)
-    console.log(`压缩前尺寸 ：${dimension.width} x ${dimension.height}`)
-    console.log(`质量：${realQuality}`)
+    const dimension = imageSize(file)
+    core.info(`正在处理：${file}`)
+    core.info(` 压缩前大小：${size / 1024} KB`)
+    core.info(` 压缩前尺寸 ：${dimension.width} x ${dimension.height}`)
 
     if (
       maxDimension &&
@@ -60,20 +59,19 @@ async function run(): Promise<void> {
       dimension.height &&
       (dimension.height > maxDimension || dimension.width > maxDimension)
     ) {
-      await sharp(file)
+      const result = await sharp(file)
         .resize(maxDimension, maxDimension, {
           fit: 'inside'
         })
         .toFile((file += '.resized.jpg'))
+      core.info(` 压缩后尺寸 ：${result.width} x ${result.height}`)
     }
 
     if (size > minSize) {
+      core.info(`质量：${realQuality}`)
       file = await compress(file, realQuality, minSize)
+      core.info(` 压缩后大小：${statSync(path.resolve(file)).size / 1024} KB`)
     }
-    dimension = imageSize(file)
-
-    console.log(`压缩后大小：${statSync(path.resolve(file)).size / 1024} KB`)
-    console.log(`压缩后尺寸 ：${dimension.width} x ${dimension.height}`)
     outputs.push(file)
   }
   core.setOutput('images', outputs.join('⭐'))
