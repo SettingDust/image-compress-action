@@ -1,7 +1,6 @@
 {
   "name": "image-compress-action",
   "version": "0.1.0",
-  "private": true,
   "description": "Compress images",
   "main": "lib/main.js",
   "scripts": {

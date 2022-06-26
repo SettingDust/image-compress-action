@@ -38,7 +38,7 @@ async function run(): Promise<void> {
   const minSize: number = parseInt(core.getInput('min-size'))
   const maxDimension: number = parseInt(core.getInput('max-dimension'))
 
-  let fileArray = files.split('⭐')
+  let fileArray = files.split('\n')
   core.info(`输入文件：${fileArray}`)
   fileArray = fileArray.map(it => path.resolve(it))
 
@@ -74,7 +74,7 @@ async function run(): Promise<void> {
     }
     outputs.push(file)
   }
-  core.setOutput('images', outputs.join('⭐'))
+  core.setOutput('images', outputs.join('\n'))
 }
 
 run()
