@@ -23,7 +23,7 @@
   "author": "SettingDust",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.3.0",
+    "@actions/core": "^1.10.0",
     "@types/sharp": "^0.28.2",
     "globby": "^11.0.3",
     "image-size": "^1.0.0",
